@@ -1,0 +1,395 @@
+{
+  "info": {
+    "name": "CareerConnect API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "rec_token",
+      "value": ""
+    },
+    {
+      "key": "seek_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Register recruiter",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/auth/register/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"recruiter1\",\n  \"email\": \"r1@test.com\",\n  \"password\": \"StrongPass123\",\n  \"password2\": \"StrongPass123\",\n  \"role\": \"recruiter\"\n}"
+        }
+      }
+    },
+    {
+      "name": "2. Register job seeker",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/auth/register/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"seeker1\",\n  \"email\": \"s1@test.com\",\n  \"password\": \"StrongPass123\",\n  \"password2\": \"StrongPass123\",\n  \"role\": \"job_seeker\"\n}"
+        }
+      }
+    },
+    {
+      "name": "3. Login recruiter (saves token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/auth/login/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"recruiter1\",\n  \"password\": \"StrongPass123\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('rec_token', pm.response.json().access);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Login seeker (saves token)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/auth/login/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"seeker1\",\n  \"password\": \"StrongPass123\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('seek_token', pm.response.json().access);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Create company",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{rec_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/companies/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "companies"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Acme Corp\",\n  \"description\": \"We build things\",\n  \"location\": \"Hyderabad\"\n}"
+        }
+      }
+    },
+    {
+      "name": "6. Post job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{rec_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/jobs/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "jobs"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"company\": 1,\n  \"title\": \"Backend Developer\",\n  \"description\": \"Build APIs\",\n  \"location\": \"Hyderabad\",\n  \"job_type\": \"full_time\",\n  \"skills_required\": \"Python, Django, MySQL\",\n  \"salary_min\": 600000,\n  \"salary_max\": 1200000\n}"
+        }
+      }
+    },
+    {
+      "name": "7. Search jobs (filters)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base}}/jobs/?location=Hyderabad&skills=Django&min_salary=500000",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "jobs",
+            "?location=Hyderabad&skills=Django&min_salary=500000"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Apply (form-data)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{seek_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/applications/apply/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "applications",
+            "apply"
+          ]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "job",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "resume",
+              "type": "file",
+              "src": ""
+            },
+            {
+              "key": "cover_note",
+              "value": "Great fit",
+              "type": "text"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Save job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{seek_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/jobs/saved/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "jobs",
+            "saved"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"job\": 1\n}"
+        }
+      }
+    },
+    {
+      "name": "10. My applications",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{seek_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/applications/mine/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "applications",
+            "mine"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11. View applicants",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{rec_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/applications/job/1/applicants/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "applications",
+            "job",
+            "1",
+            "applicants"
+          ]
+        }
+      }
+    },
+    {
+      "name": "12. Change status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{rec_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/applications/1/status/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "applications",
+            "1",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"shortlisted\"\n}"
+        }
+      }
+    },
+    {
+      "name": "13. Download resume",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{rec_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base}}/applications/1/resume/",
+          "host": [
+            "{{base}}"
+          ],
+          "path": [
+            "applications",
+            "1",
+            "resume"
+          ]
+        }
+      }
+    }
+  ]
+}

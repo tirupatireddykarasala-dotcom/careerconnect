@@ -1,0 +1,8 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.CompanyListCreateView.as_view(), name='company-list-create'),
+    path('<int:pk>/', views.CompanyDetailView.as_view(), name='company-detail'),
+    path('admin/<int:pk>/', views.AdminCompanyDeleteView.as_view(), name='admin-company-delete'),
+]

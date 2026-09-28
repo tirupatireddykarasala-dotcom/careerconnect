@@ -1,0 +1,1 @@
+web: gunicorn careerconnect.wsgi --log-file -

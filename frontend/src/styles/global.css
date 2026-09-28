@@ -1,0 +1,222 @@
+/* ------------------------------------------------------------------------
+   CareerConnect design tokens
+   Palette: deep ink-navy for authority/trust, a warm brass accent for
+   action, a warm paper background instead of stark white. This is a job
+   portal - the tone aims for "a serious career document" rather than a
+   generic SaaS dashboard, so a serif carries headings (evokes print/CV)
+   paired with a clean grotesque for body/UI text.
+   ------------------------------------------------------------------------ */
+:root {
+  --ink-900: #0f2138;
+  --ink-800: #16324f;
+  --ink-700: #1f4468;
+  --brass-500: #c98a3e;
+  --brass-600: #ad7530;
+  --paper-100: #faf8f4;
+  --paper-200: #f1ede4;
+  --line-200: #e4dfd3;
+  --text-900: #201c16;
+  --text-600: #56504a;
+  --text-400: #8a8378;
+  --success-600: #2f7d5a;
+  --success-100: #e3f1ea;
+  --warn-600: #b9791f;
+  --warn-100: #faf0dd;
+  --info-600: #3a5f9e;
+  --info-100: #e8edf7;
+  --danger-600: #b0402f;
+  --danger-100: #f6e8e5;
+  --violet-600: #6b4f9e;
+  --violet-100: #ede7f6;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --shadow-card: 0 1px 2px rgba(15, 33, 56, 0.06), 0 1px 8px rgba(15, 33, 56, 0.05);
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper-100);
+  color: var(--text-900);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--ink-900);
+  margin: 0 0 0.4em 0;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.15rem; }
+
+a { color: var(--ink-700); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button, input, select, textarea { font-family: inherit; font-size: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--brass-500);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Buttons ------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--ink-900); color: #fff; }
+.btn-primary:hover { background: var(--ink-800); }
+.btn-accent { background: var(--brass-500); color: #211705; }
+.btn-accent:hover { background: var(--brass-600); }
+.btn-outline { background: transparent; border-color: var(--line-200); color: var(--ink-900); }
+.btn-outline:hover { border-color: var(--ink-700); }
+.btn-danger { background: var(--danger-600); color: #fff; }
+.btn-danger:hover { opacity: 0.9; }
+.btn-sm { padding: 5px 12px; font-size: 0.85rem; }
+.btn-block { width: 100%; justify-content: center; }
+
+/* Cards ----------------------------------------------------------------*/
+.card {
+  background: #fff;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+
+/* Forms ------------------------------------------------------------------*/
+.field { margin-bottom: 16px; }
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-600);
+  margin-bottom: 6px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text-900);
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--ink-700);
+  outline: none;
+}
+.field-hint { font-size: 0.78rem; color: var(--text-400); margin-top: 4px; }
+.field-error { font-size: 0.8rem; color: var(--danger-600); margin-top: 4px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+
+/* Navbar -----------------------------------------------------------------*/
+.navbar {
+  background: var(--ink-900);
+  color: #fff;
+  padding: 14px 0;
+}
+.navbar .container { display: flex; align-items: center; justify-content: space-between; }
+.navbar-brand {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+.navbar-links { display: flex; align-items: center; gap: 22px; }
+.navbar-links a, .navbar-links button {
+  color: #d8dde5;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.navbar-links a:hover, .navbar-links button:hover { color: #fff; text-decoration: none; }
+.navbar-role-tag {
+  background: var(--brass-500);
+  color: #211705;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* Layout helpers -----------------------------------------------------------*/
+.page { padding: 36px 0 64px; }
+.grid-2col { display: grid; grid-template-columns: 260px 1fr; gap: 28px; }
+@media (max-width: 800px) { .grid-2col { grid-template-columns: 1fr; } }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 12px; }
+.spread { display: flex; align-items: center; justify-content: space-between; }
+.muted { color: var(--text-600); }
+.small { font-size: 0.85rem; }
+
+/* Job card ---------------------------------------------------------------*/
+.job-card { border-left: 3px solid var(--brass-500); }
+.job-card h3 { margin-bottom: 2px; }
+.job-card .company-line { color: var(--text-600); margin-bottom: 10px; }
+.job-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.tag {
+  background: var(--paper-200);
+  border: 1px solid var(--line-200);
+  color: var(--text-600);
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* Status badge -------------------------------------------------------------*/
+.status-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.status-applied { background: var(--paper-200); color: var(--text-600); }
+.status-under_review { background: var(--warn-100); color: var(--warn-600); }
+.status-shortlisted { background: var(--info-100); color: var(--info-600); }
+.status-interview { background: var(--violet-100); color: var(--violet-600); }
+.status-selected { background: var(--success-100); color: var(--success-600); }
+.status-rejected { background: var(--danger-100); color: var(--danger-600); }
+
+/* Alerts ---------------------------------------------------------------- */
+.alert { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 16px; }
+.alert-error { background: var(--danger-100); color: var(--danger-600); }
+.alert-success { background: var(--success-100); color: var(--success-600); }
+
+/* Stat cards (admin dashboard) --------------------------------------------*/
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+.stat-card { text-align: left; }
+.stat-card .stat-number { font-family: var(--font-serif); font-size: 2rem; color: var(--ink-900); }
+.stat-card .stat-label { color: var(--text-600); font-size: 0.85rem; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line-200); font-size: 0.9rem; }
+th { color: var(--text-600); font-weight: 600; font-size: 0.78rem; }
+
+.empty-state { text-align: center; padding: 48px 20px; color: var(--text-600); }
