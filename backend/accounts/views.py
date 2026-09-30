@@ -36,7 +36,6 @@ class LoginView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     permission_classes = [permissions.AllowAny]
 
-
 class MyJobSeekerProfileView(generics.RetrieveUpdateAPIView):
     """
     GET/PUT/PATCH /api/auth/profile/jobseeker/
@@ -72,15 +71,37 @@ class MeView(APIView):
         })
 
 
-# ---------------------------------------------------------------------------
-# Admin-only: manage users
-# ---------------------------------------------------------------------------
+
 class AdminUserListView(generics.ListAPIView):
     """GET /api/auth/admin/users/?role=recruiter"""
     serializer_class = UserAdminSerializer
     permission_classes = [IsAdminRole]
     filterset_fields = ['role', 'is_active_account']
     queryset = User.objects.all().order_by('-date_joined')
+
+class BootstrapAdminView(APIView):
+    """One-time admin creation over HTTP, for hosts with no shell access."""
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        import os
+        expected_key = os.environ.get('BOOTSTRAP_ADMIN_KEY')
+        if not expected_key:
+            return Response({'error': 'BOOTSTRAP_ADMIN_KEY is not set on the server.'}, status=status.HTTP_403_FORBIDDEN)
+        if request.GET.get('key') != expected_key:
+            return Response({'error': 'Invalid key.'}, status=status.HTTP_403_FORBIDDEN)
+        if User.objects.filter(role=User.Role.ADMIN).exists():
+            return Response({'error': 'An admin account already exists. This endpoint only works once.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        username = request.GET.get('username')
+        email = request.GET.get('email')
+        password = request.GET.get('password')
+        if not (username and email and password):
+            return Response({'error': 'username, email and password are all required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        User.objects.create_superuser(username=username, email=email, password=password, role=User.Role.ADMIN)
+        return Response({'message': f"Admin user '{username}' created. You can now log in."})
+    
 
 
 class AdminDashboardStatsView(APIView):
