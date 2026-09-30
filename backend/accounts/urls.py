@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/refresh/', TokenRefreshView.as_view(), name='login-refresh'),
     path('me/', views.MeView.as_view(), name='me'),
     path('bootstrap-admin/', views.BootstrapAdminView.as_view(), name='bootstrap-admin'),
+    path('reset-admin-password/', views.ResetAdminPasswordView.as_view(), name='reset-admin-password'),
 
     path('profile/jobseeker/', views.MyJobSeekerProfileView.as_view(), name='jobseeker-profile'),
     path('profile/recruiter/', views.MyRecruiterProfileView.as_view(), name='recruiter-profile'),

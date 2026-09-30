@@ -101,6 +101,37 @@ class BootstrapAdminView(APIView):
 
         User.objects.create_superuser(username=username, email=email, password=password, role=User.Role.ADMIN)
         return Response({'message': f"Admin user '{username}' created. You can now log in."})
+
+class ResetAdminPasswordView(APIView):
+    """
+    GET /api/auth/reset-admin-password/?key=...&username=...&password=...
+    Sets a new password on an existing admin account, gated by the same
+    BOOTSTRAP_ADMIN_KEY secret.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        import os
+        expected_key = os.environ.get('BOOTSTRAP_ADMIN_KEY')
+        if not expected_key:
+            return Response({'error': 'BOOTSTRAP_ADMIN_KEY is not set on the server.'}, status=status.HTTP_403_FORBIDDEN)
+        if request.GET.get('key') != expected_key:
+            return Response({'error': 'Invalid key.'}, status=status.HTTP_403_FORBIDDEN)
+
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+        if not (username and password):
+            return Response({'error': 'username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username, role=User.Role.ADMIN)
+        except User.DoesNotExist:
+            return Response({'error': f"No admin user named '{username}' was found."}, status=status.HTTP_404_NOT_FOUND)
+
+        user.set_password(password)
+        user.save(update_fields=['password'])
+        return Response({'message': f"Password for admin '{username}' has been reset. You can now log in."})
+    
     
 
 
