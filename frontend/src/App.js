@@ -4,6 +4,11 @@ import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
+
+import Feed from './pages/Feed';
+import Messages from './pages/Messages';
+import People from './pages/People';
+import Notifications from './pages/Notifications';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -12,6 +17,7 @@ import JobDetail from './pages/JobDetail';
 import SavedJobs from './pages/SavedJobs';
 import MyApplications from './pages/MyApplications';
 import Profile from './pages/Profile';
+import Network from './pages/Network';
 
 import RecruiterCompany from './pages/RecruiterCompany';
 import RecruiterJobs from './pages/RecruiterJobs';
@@ -41,6 +47,13 @@ export default function App() {
           <Route path="/saved-jobs" element={<ProtectedRoute allowedRoles={['job_seeker']}><SavedJobs /></ProtectedRoute>} />
           <Route path="/applications" element={<ProtectedRoute allowedRoles={['job_seeker']}><MyApplications /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute allowedRoles={['job_seeker']}><Profile /></ProtectedRoute>} />
+          <Route path="/network" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><Network /></ProtectedRoute>} />
+          <Route path="/feed" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><Feed /></ProtectedRoute>} />
+          <Route path="/search" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><People /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><Notifications /></ProtectedRoute>} />
+          <Route path="/feed" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><Feed /></ProtectedRoute>} />
+          <Route path="/messages" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><Messages /></ProtectedRoute>} />
+          <Route path="/messages/:username" element={<ProtectedRoute allowedRoles={['job_seeker', 'recruiter']}><Messages /></ProtectedRoute>} />
 
           {/* Recruiter */}
           <Route path="/recruiter/company" element={<ProtectedRoute allowedRoles={['recruiter']}><RecruiterCompany /></ProtectedRoute>} />

@@ -72,7 +72,7 @@ class JobSeekerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobSeekerProfile
-        fields = ['id', 'username', 'email', 'full_name', 'bio', 'skills',
+        fields = ['id', 'username', 'email', 'full_name', 'headline', 'photo', 'bio', 'skills',
                    'location', 'resume', 'experience_years', 'updated_at']
         read_only_fields = ['id', 'updated_at']
 

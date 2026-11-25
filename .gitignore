@@ -12,3 +12,12 @@ frontend/build/
 frontend/.env
 .DS_Store
 env/
+backend/env/
+env/
+venv/
+__pycache__/
+*.pyc
+node_modules/
+.env
+db.sqlite3
+backend/media/

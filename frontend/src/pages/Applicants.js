@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axios';
 import StatusBadge from '../components/StatusBadge';
+import ConnectButton from '../components/ConnectButton';
 
 const STATUS_FLOW = ['applied', 'under_review', 'shortlisted', 'interview', 'selected', 'rejected'];
 const STATUS_LABEL = {
@@ -54,6 +55,7 @@ export default function Applicants() {
               {a.cover_note && <p className="small" style={{ marginTop: 10 }}>"{a.cover_note}"</p>}
               <div className="row" style={{ marginTop: 14 }}>
                 <button className="btn btn-outline btn-sm" onClick={() => downloadResume(a.id, a.applicant_username)}>Download resume</button>
+                <ConnectButton username={a.applicant_username} />
                 <select value={a.status} onChange={(e) => changeStatus(a.id, e.target.value)} style={{ maxWidth: 180 }}>
                   {STATUS_FLOW.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
                 </select>

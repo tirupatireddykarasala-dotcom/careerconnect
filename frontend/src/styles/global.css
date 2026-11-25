@@ -1,24 +1,20 @@
-/* ------------------------------------------------------------------------
-   CareerConnect design tokens
-   Palette: deep ink-navy for authority/trust, a warm brass accent for
-   action, a warm paper background instead of stark white. This is a job
-   portal - the tone aims for "a serious career document" rather than a
-   generic SaaS dashboard, so a serif carries headings (evokes print/CV)
-   paired with a clean grotesque for body/UI text.
-   ------------------------------------------------------------------------ */
-:root {
+/* ==========================================================================
+   CareerConnect design system (mobile, tablet and laptop)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Nunito:wght@400;600;700&family=Roboto:wght@400;500;700&family=Playfair+Display:wght@500;600;700&family=Merriweather:wght@400;700&family=Lora:wght@500;600;700&family=Montserrat:wght@500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap');
+  :root {
   --ink-900: #0f2138;
   --ink-800: #16324f;
   --ink-700: #1f4468;
   --brass-500: #c98a3e;
   --brass-600: #ad7530;
-  --paper-100: #faf8f4;
+  --paper-100:#e7ece3	;
   --paper-200: #f1ede4;
   --line-200: #e4dfd3;
   --text-900: #201c16;
   --text-600: #56504a;
   --text-400: #8a8378;
-  --success-600: #2f7d5a;
+  --success-600: #9fb5ab;
   --success-100: #e3f1ea;
   --warn-600: #b9791f;
   --warn-100: #faf0dd;
@@ -33,9 +29,17 @@
   --shadow-card: 0 1px 2px rgba(15, 33, 56, 0.06), 0 1px 8px rgba(15, 33, 56, 0.05);
   --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --gutter: 24px;          /* left/right space of every page */
+  --navbar-h: 60px;
+}
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
 }
 
+/* Base ------------------------------------------------------------------- */
 * { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 html, body {
   margin: 0;
@@ -46,6 +50,8 @@ html, body {
   font-size: 15px;
   line-height: 1.55;
 }
+body { overflow-x: hidden; }
+img { max-width: 100%; }
 
 h1, h2, h3, h4 {
   font-family: var(--font-serif);
@@ -53,11 +59,11 @@ h1, h2, h3, h4 {
   color: var(--ink-900);
   margin: 0 0 0.4em 0;
   letter-spacing: -0.01em;
+  line-height: 1.2;
 }
-
-h1 { font-size: 2rem; }
-h2 { font-size: 1.5rem; }
-h3 { font-size: 1.15rem; }
+h1 { font-size: clamp(1.6rem, 4vw, 2rem); }
+h2 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
+h3 { font-size: 1.1rem; }
 
 a { color: var(--ink-700); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -70,23 +76,30 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 }
 
 .container {
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--gutter);
 }
 
-/* Buttons ------------------------------------------------------------- */
+/* Buttons: every button has the same height, text is centered ----------- */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 9px 18px;
+  min-height: 40px;
+  padding: 0 18px;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-align: center;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 }
+.btn:hover { text-decoration: none; }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .btn-primary { background: var(--ink-900); color: #fff; }
 .btn-primary:hover { background: var(--ink-800); }
@@ -96,19 +109,24 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .btn-outline:hover { border-color: var(--ink-700); }
 .btn-danger { background: var(--danger-600); color: #fff; }
 .btn-danger:hover { opacity: 0.9; }
-.btn-sm { padding: 5px 12px; font-size: 0.85rem; }
-.btn-block { width: 100%; justify-content: center; }
+.btn-sm { min-height: 32px; padding: 0 12px; font-size: 0.85rem; }
+.btn-block { width: 100%; }
 
-/* Cards ----------------------------------------------------------------*/
+/* A row of buttons that wraps neatly on small screens */
+.btn-group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* Cards ------------------------------------------------------------------ */
 .card {
   background: #fff;
   border: 1px solid var(--line-200);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   padding: 20px;
+  overflow-wrap: break-word;
 }
+@media (max-width: 640px) { .card { padding: 16px; } }
 
-/* Forms ------------------------------------------------------------------*/
+/* Forms ------------------------------------------------------------------ */
 .field { margin-bottom: 16px; }
 .field label {
   display: block;
@@ -119,12 +137,14 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 }
 .field input, .field select, .field textarea {
   width: 100%;
+  min-height: 40px;
   padding: 9px 12px;
   border: 1px solid var(--line-200);
   border-radius: var(--radius-sm);
   background: #fff;
   color: var(--text-900);
 }
+.field textarea { resize: vertical; }
 .field input:focus, .field select:focus, .field textarea:focus {
   border-color: var(--ink-700);
   outline: none;
@@ -132,50 +152,144 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .field-hint { font-size: 0.78rem; color: var(--text-400); margin-top: 4px; }
 .field-error { font-size: 0.8rem; color: var(--danger-600); margin-top: 4px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
 
-/* Navbar -----------------------------------------------------------------*/
+/* Plain selects (for example the status drop-down on the Applicants page) */
+select {
+  min-height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--line-200);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text-900);
+}
+.field select { min-height: 40px; padding: 9px 12px; }
+
+/* Phones: 16px inputs stop the browser from zooming in when you tap them */
+@media (max-width: 640px) {
+  input, select, textarea { font-size: 16px; }
+}
+
+/* Navbar ------------------------------------------------------------------
+   Laptop: one clean line.   Below 1180px: brand + a menu button.            */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   background: var(--ink-900);
   color: #fff;
-  padding: 14px 0;
 }
-.navbar .container { display: flex; align-items: center; justify-content: space-between; }
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: var(--navbar-h);
+  max-width: 1280px;
+}
 .navbar-brand {
   font-family: var(--font-serif);
   font-size: 1.3rem;
   font-weight: 700;
   color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.navbar-links { display: flex; align-items: center; gap: 22px; }
+.navbar-brand:hover { text-decoration: none; }
+
+.navbar-links { display: flex; align-items: center; gap: 18px; }
 .navbar-links a, .navbar-links button {
   color: #d8dde5;
+  font-size: 0.92rem;
   font-weight: 500;
+  white-space: nowrap;
   background: none;
   border: none;
+  border-bottom: 2px solid transparent;
+  padding: 6px 0;
   cursor: pointer;
 }
 .navbar-links a:hover, .navbar-links button:hover { color: #fff; text-decoration: none; }
+.navbar-links a.active { color: #fff; border-bottom-color: var(--brass-500); }
+.navbar-links button {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+}
 .navbar-role-tag {
   background: var(--brass-500);
   color: #211705;
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 
-/* Layout helpers -----------------------------------------------------------*/
+.navbar-toggle {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.navbar-toggle-bar { display: block; width: 20px; height: 2px; background: #fff; border-radius: 2px; }
+
+@media (max-width: 1180px) {
+  .navbar-toggle { display: flex; }
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 6px var(--gutter) 18px;
+    background: var(--ink-900);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    max-height: calc(100vh - var(--navbar-h));
+    overflow-y: auto;
+  }
+  .navbar-links.open { display: flex; }
+  .navbar-links a {
+    padding: 14px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 1rem;
+  }
+  .navbar-links a.active {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 3px 0 0 var(--brass-500);
+    padding-left: 12px;
+  }
+  .navbar-role-tag { align-self: flex-start; margin: 14px 0 10px; }
+  .navbar-links button { width: 100%; min-height: 42px; }
+}
+
+/* Layout helpers ------------------------------------------------------------ */
 .page { padding: 36px 0 64px; }
-.grid-2col { display: grid; grid-template-columns: 260px 1fr; gap: 28px; }
-@media (max-width: 800px) { .grid-2col { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .page { padding: 24px 0 48px; } }
+
+.grid-2col { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 28px; }
+@media (max-width: 800px) { .grid-2col { grid-template-columns: minmax(0, 1fr); gap: 16px; } }
+
 .stack { display: flex; flex-direction: column; gap: 16px; }
-.row { display: flex; align-items: center; gap: 12px; }
-.spread { display: flex; align-items: center; justify-content: space-between; }
+.row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.row > input { min-width: 0; }
+.spread { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .muted { color: var(--text-600); }
 .small { font-size: 0.85rem; }
 
-/* Job card ---------------------------------------------------------------*/
+/* Job card ------------------------------------------------------------------- */
 .job-card { border-left: 3px solid var(--brass-500); }
 .job-card h3 { margin-bottom: 2px; }
 .job-card .company-line { color: var(--text-600); margin-bottom: 10px; }
@@ -189,13 +303,14 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   border-radius: 999px;
 }
 
-/* Status badge -------------------------------------------------------------*/
+/* Status badge ------------------------------------------------------------------ */
 .status-badge {
   display: inline-block;
   font-size: 0.78rem;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 999px;
+  white-space: nowrap;
 }
 .status-applied { background: var(--paper-200); color: var(--text-600); }
 .status-under_review { background: var(--warn-100); color: var(--warn-600); }
@@ -204,13 +319,13 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .status-selected { background: var(--success-100); color: var(--success-600); }
 .status-rejected { background: var(--danger-100); color: var(--danger-600); }
 
-/* Alerts ---------------------------------------------------------------- */
+/* Alerts ------------------------------------------------------------------------- */
 .alert { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.9rem; margin-bottom: 16px; }
 .alert-error { background: var(--danger-100); color: var(--danger-600); }
 .alert-success { background: var(--success-100); color: var(--success-600); }
 
-/* Stat cards (admin dashboard) --------------------------------------------*/
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+/* Stat cards (admin dashboard) ---------------------------------------------------- */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
 .stat-card { text-align: left; }
 .stat-card .stat-number { font-family: var(--font-serif); font-size: 2rem; color: var(--ink-900); }
 .stat-card .stat-label { color: var(--text-600); font-size: 0.85rem; }
@@ -218,5 +333,206 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line-200); font-size: 0.9rem; }
 th { color: var(--text-600); font-weight: 600; font-size: 0.78rem; }
+@media (max-width: 760px) {
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
 
 .empty-state { text-align: center; padding: 48px 20px; color: var(--text-600); }
+
+/* People rows (Network, Search, Notifications, Experience, Education) ---------------- */
+.person-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-200);
+}
+.person-row:last-child { border-bottom: none; }
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ink-800);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.avatar-lg { width: 96px; height: 96px; font-size: 2.2rem; }
+
+.person-info { flex: 1; min-width: 0; }
+.person-name { font-weight: 600; color: var(--ink-900); overflow-wrap: anywhere; }
+.person-headline { color: var(--text-600); font-size: 0.85rem; overflow-wrap: anywhere; }
+.person-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+
+/* On phones the buttons drop to their own line under the name */
+@media (max-width: 560px) {
+  .person-row { flex-wrap: wrap; }
+  .person-actions { flex-basis: 100%; flex-shrink: 1; }
+  .avatar ~ .person-actions { margin-left: 60px; }
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.count-pill {
+  display: inline-block;
+  background: var(--brass-500);
+  color: #211705;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 1px 9px;
+  border-radius: 999px;
+}
+.count-pill-quiet { background: var(--paper-200); color: var(--text-600); }
+
+/* Home page ------------------------------------------------------------------------ */
+.hero { padding: 72px 0 36px; }
+.hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); line-height: 1.12; max-width: 18ch; margin-bottom: 18px; }
+.hero p { font-size: 1.08rem; color: var(--text-600); max-width: 60ch; margin: 0; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0 64px;
+}
+.feature-card h3 { margin-bottom: 6px; }
+.feature-card p { margin: 0; color: var(--text-600); font-size: 0.92rem; }
+@media (max-width: 640px) {
+  .hero { padding: 40px 0 24px; }
+  .hero-actions .btn { width: 100%; }
+  .feature-grid { margin-bottom: 40px; }
+}
+/* ==========================================================================
+   MY THEME: change only the values on the right side of each line
+   ========================================================================== */
+:root {
+  /* FONTS */
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* body text, buttons, menu */
+  --font-serif: 'Playfair Display', Georgia, serif;                                    /* headings and logo */
+
+  /* PAGE BACKGROUND (top colour to bottom colour) */
+  --page-bg-top: #e6edf7;
+  --page-bg-bottom: #f6f3ec;
+
+  /* BOXES: cards, input boxes, drop-downs */
+  --card-bg: #ffffff;
+  --card-border: #e4dfd3;
+
+  /* TOP BAR and the PHONE MENU BOX */
+  --nav-bg: #0f2138;
+  --nav-text: #d8dde5;
+  --nav-text-active: #ffffff;
+  --nav-accent: #c98a3e;            /* line under the current page */
+
+  /* BUTTONS */
+  --btn-primary-bg: #0f2138;        /* dark buttons: Post, Send, Accept, Connect */
+  --btn-primary-hover: #16324f;
+  --btn-primary-text: #ffffff;
+  --btn-accent-bg: #c98a3e;         /* gold buttons, number badges, role tag */
+  --btn-accent-hover: #ad7530;
+  --btn-accent-text: #211705;
+  --btn-outline-text: #0f2138;      /* outlined buttons: Decline, Delete, Cancel */
+  --btn-outline-border: #cfc8b8;
+
+  /* TEXT COLOURS */
+  --text-heading: #0f2138;
+  --text-body: #201c16;
+  --text-muted: #56504a;
+  --text-link: #1f4468;
+}
+
+/* ---- everything below uses the values above; */
+body {
+  background: linear-gradient(180deg, var(--page-bg-top) 0%, var(--page-bg-bottom) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text-body);
+  font-family: var(--font-sans);
+}
+h1, h2, h3, h4 { font-family: var(--font-serif); color: var(--text-heading); }
+.navbar-brand { font-family: var(--font-serif); }
+a { color: var(--text-link); }
+.muted { color: var(--text-muted); }
+
+/* boxes */
+.card { background: var(--card-bg); border-color: var(--card-border); }
+.field input, .field select, .field textarea, select {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  color: var(--text-body);
+}
+.person-name { color: var(--text-heading); }
+.person-headline { color: var(--text-muted); }
+
+/* top bar */
+.navbar { background: var(--nav-bg); }
+.navbar-links a, .navbar-links button { color: var(--nav-text); }
+.navbar-links a:hover, .navbar-links button:hover, .navbar-links a.active { color: var(--nav-text-active); }
+.navbar-links a.active { border-bottom-color: var(--nav-accent); }
+
+/* phone menu box */
+@media (max-width: 1180px) {
+  .navbar-links { background: var(--nav-bg); }
+  .navbar-links a.active {
+    border-bottom-color: rgba(214, 122, 122, 0.08);
+    box-shadow: inset 3px 0 0 var(--nav-accent);
+  }
+}
+
+/* buttons */
+.btn-primary { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+.btn-primary:hover { background: var(--btn-primary-hover); }
+.btn-accent { background: var(--btn-accent-bg); color: var(--btn-accent-text); }
+.btn-accent:hover { background: var(--btn-accent-hover); }
+.btn-outline { color: var(--btn-outline-text); border-color: var(--btn-outline-border); }
+
+/* small coloured parts */
+.avatar { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+.count-pill { background: var(--btn-accent-bg); color: var(--btn-accent-text); }
+.navbar-role-tag { background: var(--btn-accent-bg); color: var(--btn-accent-text); }
+
+
+/* ==========================================================================
+   SIDE COLOURS: left and right sides one colour, the middle column another
+   ========================================================================== */
+:root {
+  --side-bg: #afc3dc;      /* colour of the LEFT and RIGHT sides */
+  --center-bg: hsl(84, 19%, 95%);    /* colour of the MIDDLE column */
+}
+body { background: var(--side-bg); }
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--center-bg);
+  box-shadow: 0 0 28px rgba(15, 33, 56, 0.12);
+}
+
+
+/* ==========================================================================
+   BOX COLOURS: change only the values on the right side
+   ========================================================================== */
+:root {
+  --card-bg: #f4f4e9;          /* post cards, notification cards, all big boxes */
+  --card-border: #a1b0c4;      /* thin line around the cards */
+  --input-bg: #f8efef;         /* typing boxes: post box, comment box, search box */
+  --paper-200: #e8ecf1;        /* comment bubbles, small tags, selected chat row */
+}
+
+.card { box-shadow: 0 2px 10px rgba(15, 33, 56, 0.08); }
+.field input, .field select, .field textarea, select, .row > input {
+  background: var(--input-bg);
+}

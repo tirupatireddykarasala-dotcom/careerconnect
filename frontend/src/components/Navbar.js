@@ -1,6 +1,8 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import MessagesLink from './MessagesLink';
+import NotificationsLink from './NotificationsLink';
 
 const ROLE_LABEL = { job_seeker: 'Job Seeker', recruiter: 'Recruiter', admin: 'Admin' };
 
@@ -9,56 +11,85 @@ const ROLE_HOME = { job_seeker: '/jobs', recruiter: '/recruiter/jobs', admin: '/
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [open, setOpen] = useState(false);   // is the phone menu open?
+
+  // Close the phone menu every time the page changes
+  useEffect(() => { setOpen(false); }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
+    setOpen(false);
     navigate('/login');
   };
 
   return (
     <nav className="navbar">
-      <div className="container">
+      <div className="container navbar-inner">
         <Link to={user ? ROLE_HOME[user.role] : '/'} className="navbar-brand">CareerConnect</Link>
-        <div className="navbar-links">
+
+        <button
+          type="button"
+          className="navbar-toggle"
+          aria-label="Menu"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
+          <span className="navbar-toggle-bar" />
+          <span className="navbar-toggle-bar" />
+          <span className="navbar-toggle-bar" />
+        </button>
+
+        <div className={`navbar-links${open ? ' open' : ''}`}>
           {!user && (
             <>
-              <Link to="/jobs">Browse Jobs</Link>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              <NavLink to="/jobs">Browse Jobs</NavLink>
+              <NavLink to="/login">Login</NavLink>
+              <NavLink to="/register">Register</NavLink>
             </>
           )}
 
           {user && user.role === 'job_seeker' && (
             <>
-              <Link to="/jobs">Browse Jobs</Link>
-              <Link to="/saved-jobs">Saved</Link>
-              <Link to="/applications">My Applications</Link>
-              <Link to="/profile">Profile</Link>
+              <NavLink to="/feed">Feed</NavLink>
+              <NavLink to="/network">My Network</NavLink>
+              <NavLink to="/search">Search</NavLink>
+              <NavLink to="/jobs">Browse Jobs</NavLink>
+              <MessagesLink />
+              <NotificationsLink />
+              <NavLink to="/saved-jobs">Saved</NavLink>
+              <NavLink to="/applications">My Applications</NavLink>
+              <NavLink to="/profile">Profile</NavLink>
             </>
           )}
 
           {user && user.role === 'recruiter' && (
             <>
-              <Link to="/recruiter/jobs">My Postings</Link>
-              <Link to="/recruiter/jobs/new">Post a Job</Link>
-              <Link to="/recruiter/company">Company</Link>
+              <NavLink to="/feed">Feed</NavLink>
+              <NavLink to="/network">My Network</NavLink>
+              <NavLink to="/search">Search</NavLink>
+              <NavLink to="/recruiter/jobs" end>My Postings</NavLink>
+              <NavLink to="/recruiter/jobs/new">Post a Job</NavLink>
+              <MessagesLink />
+              <NotificationsLink />
+              <NavLink to="/recruiter/company">Company</NavLink>
             </>
           )}
 
           {user && user.role === 'admin' && (
             <>
-              <Link to="/admin">Dashboard</Link>
-              <Link to="/admin/users">Users</Link>
-              <Link to="/admin/jobs">Jobs</Link>
-              <Link to="/admin/companies">Companies</Link>
-              <Link to="/admin/applications">Applications</Link>
+              <NavLink to="/admin" end>Dashboard</NavLink>
+              <NavLink to="/admin/users">Users</NavLink>
+              <NavLink to="/admin/jobs">Jobs</NavLink>
+              <NavLink to="/admin/companies">Companies</NavLink>
+              <NavLink to="/admin/applications">Applications</NavLink>
             </>
           )}
 
           {user && (
             <>
               <span className="navbar-role-tag">{ROLE_LABEL[user.role]}</span>
-              <button onClick={handleLogout}>Logout</button>
+              <button type="button" onClick={handleLogout}>Logout</button>
             </>
           )}
         </div>

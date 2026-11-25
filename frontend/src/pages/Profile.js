@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import api, { extractErrorMessage } from '../api/axios';
 import Alert from '../components/Alert';
+import ExperienceSection from '../components/ExperienceSection';
+import EducationSection from '../components/EducationSection';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [saving, setSaving] = useState(false);
@@ -18,10 +21,12 @@ export default function Profile() {
     setError(''); setSuccess(''); setSaving(true);
     try {
       const formData = new FormData();
-      ['full_name', 'bio', 'skills', 'location', 'experience_years'].forEach((f) => formData.append(f, profile[f] ?? ''));
+      ['full_name','headline', 'bio', 'skills', 'location', 'experience_years'].forEach((f) => formData.append(f, profile[f] ?? ''));
       if (resumeFile) formData.append('resume', resumeFile);
+      if (photoFile) formData.append('photo', photoFile);
       const { data } = await api.patch('/auth/profile/jobseeker/', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       setProfile(data);
+      setPhotoFile(null);
       setSuccess('Profile updated.');
     } catch (err) {
       setError(extractErrorMessage(err));
@@ -39,9 +44,31 @@ export default function Profile() {
         <Alert>{error}</Alert>
         <Alert type="success">{success}</Alert>
         <form onSubmit={handleSave}>
+                    <div className="field">
+            <label>Profile photo</label>
+            <div className="row">
+              {photoFile || profile.photo ? (
+                <img
+                  src={photoFile ? URL.createObjectURL(photoFile) : profile.photo}
+                  alt="Profile"
+                  style={{ width: 96, height: 96, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--line-200)' }}
+                />
+              ) : (
+                <div className="avatar" style={{ width: 96, height: 96, fontSize: '2.2rem' }}>
+                  {(profile.full_name || 'U').charAt(0)}
+                </div>
+              )}
+              <input type="file" accept="image/*" onChange={(e) => setPhotoFile(e.target.files[0])} />
+            </div>
+          </div>
           <div className="field">
             <label>Full name</label>
             <input value={profile.full_name || ''} onChange={(e) => setProfile({ ...profile, full_name: e.target.value })} />
+          </div>
+                    <div className="field">
+            <label>Headline</label>
+            <input value={profile.headline || ''} onChange={(e) => setProfile({ ...profile, headline: e.target.value })} placeholder="e.g. React Developer | Fresher" />
+            <p className="field-hint">A short line under your name, like a job title.</p>
           </div>
           <div className="field">
             <label>Location</label>
@@ -68,6 +95,8 @@ export default function Profile() {
           <button className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save profile'}</button>
         </form>
       </div>
-    </div>
+     <div style={{ marginTop: 24 }}><ExperienceSection /></div>
+    <div style={{ marginTop: 24 }}><EducationSection /></div>
+  </div>
   );
 }
